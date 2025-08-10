@@ -11,13 +11,14 @@ export const ChatProvider = ({ children }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [unseenMessages, setUnseenMessages] = useState({});
   const [token] = useState(localStorage.getItem("token"));
+  const backendUrl = import.meta.env.VITE_BACKEND_URL; // ✅ Fixed env syntax
 
   const { socket, axios, authUser } = useContext(AuthContext);
 
   // Fetch all users
   const getUsers = async () => {
     try {
-      const { data } = await axios.get("/api/messages/users", {
+      const { data } = await axios.get(`${backendUrl}/api/messages/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (data.success) {
@@ -33,7 +34,7 @@ export const ChatProvider = ({ children }) => {
   // Fetch messages with a specific user
   const getMessages = async (userId) => {
     try {
-      const { data } = await axios.get(`/api/messages/${userId}`, {
+      const { data } = await axios.get(`${backendUrl}/api/messages/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (data.success) {
@@ -57,17 +58,14 @@ export const ChatProvider = ({ children }) => {
     }
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/messages/send/${receiverId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ text, image }),
-        }
-      );
+      const res = await fetch(`${backendUrl}/api/messages/send/${receiverId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ text, image }),
+      });
 
       const data = await res.json();
 
@@ -76,7 +74,6 @@ export const ChatProvider = ({ children }) => {
         return;
       }
 
-      // Normalize message object
       const sentMessage = data.message || data;
       if (!sentMessage.receiverId) {
         sentMessage.receiverId = receiverId;
@@ -108,7 +105,7 @@ export const ChatProvider = ({ children }) => {
 
         axios
           .put(
-            `/api/messages/mark/${newMessage._id}`,
+            `${backendUrl}/api/messages/mark/${newMessage._id}`,
             {},
             { headers: { Authorization: `Bearer ${token}` } }
           )

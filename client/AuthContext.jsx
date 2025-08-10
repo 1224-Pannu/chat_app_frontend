@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-axios.defaults.baseURL = backendUrl;
+axios.defaults.baseURL = backendUrl; // ✅ Default for axios
 
 export const AuthContext = createContext();
 AuthContext.displayName = "AuthContext";
@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
   // ✅ Verify auth from backend
   async function checkAuth() {
     try {
-      const { data } = await axios.get("/api/auth/check-auth");
+      const { data } = await axios.get(`${backendUrl}/api/auth/check-auth`);
       if (data.success && data.user?._id) {
         setAuthUser(data.user);
         connectSocket(data.user);
@@ -47,7 +47,10 @@ export function AuthProvider({ children }) {
   // ✅ Login
   async function login(state, credentials) {
     try {
-      const { data } = await axios.post(`/api/auth/${state}`, credentials);
+      const { data } = await axios.post(
+        `${backendUrl}/api/auth/${state}`,
+        credentials
+      );
       if (data.success && data.userData?._id) {
         localStorage.setItem("token", data.token);
         setToken(data.token);
@@ -78,7 +81,10 @@ export function AuthProvider({ children }) {
   // ✅ Update profile
   async function updateProfile(updatedFields) {
     try {
-      const { data } = await axios.put("/api/auth/update", updatedFields);
+      const { data } = await axios.put(
+        `${backendUrl}/api/auth/update`,
+        updatedFields
+      );
       if (data.success && data.user?._id) {
         setAuthUser(data.user);
         toast.success(data.message || "Profile updated");
@@ -110,7 +116,6 @@ export function AuthProvider({ children }) {
 
     newSocket.on("connect", () => {
       console.log("📡 Socket connected:", newSocket.id);
-      // Join personal room for direct messages
       newSocket.emit("join", userData._id);
       console.log(`🏠 Joined personal room: ${userData._id}`);
     });
@@ -120,7 +125,6 @@ export function AuthProvider({ children }) {
       setOnlineUsers(users);
     });
 
-    // Debug listener for new messages
     newSocket.on("newMessage", (msg) => {
       console.log("📨 Real-time message received (AuthContext debug):", msg);
     });
@@ -156,7 +160,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     authUser,
-    currentUser: authUser, // ✅ extra alias for old code
+    currentUser: authUser,
     setAuthUser,
     login,
     logout,
