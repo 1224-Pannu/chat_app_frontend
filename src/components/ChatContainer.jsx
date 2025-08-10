@@ -188,7 +188,7 @@ const ChatContainer = () => {
           <div className="relative">
             <button
               onClick={() => setShowEmojiPicker(false)}
-              className="absolute -top-3 -right-3 bg-gray-800 text-white w-7 h-7 flex items-center justify-center rounded-full text-lg hover:bg-red-600"
+              className="absolute -top-3 -right-3 bg-gray-800 text-white w-7 h-7 flex items-center justify-center rounded-full text-lg hover:bg-red-600 z-10"
             >
               ✕
             </button>
