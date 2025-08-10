@@ -184,16 +184,16 @@ const ChatContainer = () => {
 
       {/* Emoji Picker */}
       {showEmojiPicker && (
-        <div className="absolute bottom-20 left-4 z-50 bg-white p-2 rounded shadow-lg w-64 sm:w-auto">
-          <div className="flex justify-end mb-1">
+        <div className="absolute bottom-20 left-4 z-50 rounded shadow-lg">
+          <div className="relative">
             <button
               onClick={() => setShowEmojiPicker(false)}
-              className="bg-gray-800 text-white w-6 h-6 flex items-center justify-center rounded-full text-lg hover:bg-red-600 sm:w-6 sm:h-6 sm:text-lg"
+              className="absolute -top-3 -right-3 bg-gray-800 text-white w-7 h-7 flex items-center justify-center rounded-full text-lg hover:bg-red-600"
             >
               ✕
             </button>
+            <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
           </div>
-          <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
         </div>
       )}
 
