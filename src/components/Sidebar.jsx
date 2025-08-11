@@ -6,9 +6,10 @@ import newImage from "../assets/newimage.png";
 import { AuthContext } from "../../client/AuthContext";
 import { ChatContext } from "../../client/ChatContext";
 import axios from "axios";
-const [dropdownOpen, setDropdownOpen] = useState(false);
 
 const Sidebar = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false); // ✅ FIX: added inside component
+
   const {
     getUsers,
     users,
@@ -18,7 +19,7 @@ const Sidebar = () => {
     setUnseenMessages,
   } = useContext(ChatContext);
 
-  const { logout, onlineUsers, authUser } = useContext(AuthContext); // ✅ included authUser
+  const { logout, onlineUsers, authUser } = useContext(AuthContext);
 
   const [input, setInput] = useState("");
   const navigate = useNavigate();
