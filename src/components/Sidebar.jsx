@@ -6,6 +6,7 @@ import newImage from "../assets/newimage.png";
 import { AuthContext } from "../../client/AuthContext";
 import { ChatContext } from "../../client/ChatContext";
 import axios from "axios";
+const [dropdownOpen, setDropdownOpen] = useState(false);
 
 const Sidebar = () => {
   const {
@@ -72,27 +73,39 @@ const Sidebar = () => {
           />
 
           {/* Dropdown Menu */}
-          <div className="relative py-2 group">
+          <div className="relative py-2">
             <img
               src={assets.menu_icon}
               alt="Menu"
-              className="max-h-5 cursor-pointer transition-transform duration-300 hover:rotate-90"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+              className={`max-h-5 cursor-pointer transition-transform duration-300 ${
+                dropdownOpen ? "rotate-90" : ""
+              }`}
             />
-            <div className="absolute top-full right-0 z-20 w-36 p-5 rounded-xl bg-[#292c4a] border border-gray-600 text-gray-100 hidden group-hover:block shadow-xl">
-              <p
-                onClick={() => navigate("/profile")}
-                className="cursor-pointer text-sm hover:text-violet-400 transition"
-              >
-                Edit Profile
-              </p>
-              <hr className="my-2 border-gray-500" />
-              <p
-                onClick={logout}
-                className="cursor-pointer text-sm hover:text-red-400 transition"
-              >
-                Logout
-              </p>
-            </div>
+
+            {dropdownOpen && (
+              <div className="absolute top-full right-0 z-20 w-36 p-5 rounded-xl bg-[#292c4a] border border-gray-600 text-gray-100 shadow-xl">
+                <p
+                  onClick={() => {
+                    navigate("/profile");
+                    setDropdownOpen(false);
+                  }}
+                  className="cursor-pointer text-sm hover:text-violet-400 transition"
+                >
+                  Edit Profile
+                </p>
+                <hr className="my-2 border-gray-500" />
+                <p
+                  onClick={() => {
+                    logout();
+                    setDropdownOpen(false);
+                  }}
+                  className="cursor-pointer text-sm hover:text-red-400 transition"
+                >
+                  Logout
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
